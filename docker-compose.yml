@@ -14,7 +14,7 @@ services:
       JWT_SECRET_KEY: $JWT_SECRET_KEY
     ports: 
       #detect port in production instead of hard coding
-      - "3000:3000"
+      - $PORTS
     volumes: 
       - ./:/usr/src/athman-api
       - /usr/src/athman-api/node_modules
