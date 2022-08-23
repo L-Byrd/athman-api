@@ -1,0 +1,38 @@
+version: '3.8'
+
+services: 
+  #Backend API
+  athman-api:
+    container_name: backend
+    build: ./
+    command: yarn start
+    working_dir: /usr/src/athman-api
+    environment:
+      # switch uri to environment variable in production
+      POSTGRES_URI: $POSTGRES_URI
+      REDIS_URI: $REDIS_URI
+      JWT_SECRET_KEY: $JWT_SECRET_KEY
+    ports: 
+      #detect port in production instead of hard coding
+      - "3000:3000"
+    volumes: 
+      - ./:/usr/src/athman-api
+      - /usr/src/athman-api/node_modules
+
+  # Postgres
+  postgres: 
+    environment:
+      POSTGRES_USER: master
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: athman-docker
+      POSTGRES_HOST: postgres
+    container_name: postgres
+    build: ./postgres
+    ports: 
+      - $POSTGRES_PORT
+
+  #redis
+  redis:
+    image: redis
+    ports: 
+      - $REDIS_PORT
